@@ -1,0 +1,390 @@
+<!doctype html>
+<html lang="id">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Pengingat Minum OPM</title>
+    <link rel="manifest" href="manifest.json">
+
+    <style>
+        :root {
+            --card-bg: rgba(255, 255, 255, 0.88);
+            --text: #111;
+            --muted: #6b7280;
+            --accent: #0ea5a4;
+            --orange: rgba(239, 155, 15, 0.7); /* Tambahkan variabel untuk warna oranye nav */
+        }
+
+        /* 🔑 PERBAIKAN 1: Mengatur box-sizing untuk mencegah scroll horizontal */
+        *, *::before, *::after {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial;
+            margin: 0;
+            color: var(--text);
+            background: url('reminder OPM.jpg') no-repeat center center fixed;
+            background-size: cover;
+            /* 🔑 PERBAIKAN 2: Menggunakan Flexbox untuk mendorong footer ke bawah */
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column; 
+            /* Tambahkan overflow-x: hidden; sebagai jaminan jika ada masalah tak terduga */
+            overflow-x: hidden;
+        }
+
+        .top-nav {
+            display: flex;
+            width: 100%;
+            position: absolute;
+            top: 0px;
+            z-index: 10;
+            font-size: 18px;
+            background-color: var(--orange); /* Menggunakan variabel oranye */
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 30px;
+        }
+
+        /* Grup Tautan */
+        .nav-links {
+            display: flex;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: #4e3316;
+            text-decoration: none;
+            font-weight: bold;
+            margin-left: 30px;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: white;
+        }
+
+        /* --- LOGO --- */
+        .logo img {
+            max-width: 100px;
+            height: auto;
+            display: block;
+        }
+
+
+        .wrap {
+            width: 90%;
+            max-width: 1000px;
+            margin: 150px auto;
+            padding: 0 15px;
+            /* 🔑 PERBAIKAN 3: Memastikan konten utama bisa tumbuh dan mendorong footer */
+            flex-grow: 1; 
+        }
+
+        .card {
+            background: var(--card-bg);
+            border-radius: 14px;
+            padding: 24px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            backdrop-filter: blur(6px);
+            margin-bottom: 30px;
+        }
+
+        h5 { text-align: left; }
+
+        label {
+            display: block;
+            font-size: 0.9rem;
+            margin-top: 10px;
+            color: var(--muted);
+        }
+
+        h1, h2, h3 { text-align: center; }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 10px;
+            border-radius: 8px;
+            border: 1px solid #e5e7eb;
+            margin-top: 6px;
+        }
+
+        button {
+            background: var(--accent);
+            color: white;
+            border: none;
+            padding: 10px 14px;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-top: 14px;
+            font-weight: 600;
+            width: 100%;
+            margin-bottom: 5px;
+        }
+
+        /* Mengelompokkan tombol agar bisa diatur di layar besar */
+        .button-group {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+        @media (min-width: 600px) {
+            .button-group {
+                flex-direction: row;
+            }
+            .button-group button {
+                width: auto;
+                flex-grow: 1;
+            }
+        }
+
+
+        button:hover { opacity: 0.9; }
+        .danger { background: #ef4444; }
+        .gray { background: #374151; }
+
+        .info { margin-top: 14px; color: var(--muted); font-size: 0.9rem; }
+        .countdown { font-weight: 700; font-size: 1.1rem; margin-top: 12px; text-align: center; }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+
+        th, td {
+            border: 1px solid #ccc;
+            padding: 8px;
+            text-align: center;
+            font-size: 0.9rem;
+        }
+
+        th { background: #0ea5a4; color: white; }
+
+        /* 🔑 PERBAIKAN 4: CSS untuk footer yang dijamin full-width dan di bawah */
+        footer {
+            width: 100%;
+            background-color: var(--orange); /* Latar belakang oranye transparan */
+            color: white; /* Teks putih agar terlihat */
+            text-align: center;
+            padding: 20px 15px; /* Padding atas/bawah */
+            margin-top: 0; /* Penting untuk Flexbox: Mendorong footer ke bawah */
+        }
+        
+        /* Gaya tambahan untuk teks di footer agar rapi */
+        footer p {
+            margin: 5px 0;
+            line-height: 1.4;
+        }
+        /* Penyesuaian agar tampilan lebih semu di ponsel/layar kecil */
+        @media (max-width: 600px) {
+            .top-nav {
+                padding: 10px 15px;
+            }
+            .nav-links a {
+                margin-left: 15px;
+                font-size: 0.85rem;
+            }
+            .wrap {
+                margin: 100px auto 50px auto;
+                width: 95%;
+                padding: 0;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <header class="hero-image">
+        <nav class="top-nav">
+
+            <div class="logo">
+                <img src="logo siperca.png" alt="Logo Siperca">
+            </div>
+
+            <div class="nav-links">
+                <a href="file:///C:/Users/talit/Documents/halaman%20awal.html" target="_blank" title="Menuju ke halaman Home">Home</a>
+                <a href="file:///C:/Users/talit/Documents/index.html" target="_blank" title="Menuju ke halaman Pengingat">Pengingat</a>
+                <a href="file:///C:/Users/talit/Documents/data%20pasien.html" target="_blank" title="Menuju ke halaman Data Pasien">Data Pasien</a>
+            </div>
+
+        </nav>
+    </header>
+
+
+    <div class="wrap">
+        <div class="card">
+            <h2>Data Kesehatan Anak</h2>
+            <label for="nama">Nama</label>
+            <input id="nama">
+
+            <label for="umur">Umur (tahun)</label>
+            <input id="umur" type="number" min="0">
+
+            <label for="jk">Jenis Kelamin</label>
+            <select id="jk">
+                <option value="">Pilih</option>
+                <option>Laki-laki</option>
+                <option>Perempuan</option>
+            </select>
+
+            <label for="bb">Berat Badan (kg)</label>
+            <input id="bb" type="number" min="0" step="0.1">
+
+            <label for="tb">Tinggi Badan (cm)</label>
+            <input id="tb" type="number" min="0" step="0.1">
+
+            <label for="tgl">Tanggal Terakhir Minum POPM</label>
+            <input id="tgl" type="date">
+
+            <label for="keluhan">Keluhan</label>
+            <textarea id="keluhan" rows="2" placeholder="Tuliskan keluhan jika ada..."></textarea>
+
+            <button id="simpan">Simpan Data</button>
+
+            <hr>
+            <h3>Cari Berdasarkan Tanggal</h3>
+            <input id="cari-tgl" type="date">
+            <button id="cari">Cari</button>
+
+            <table id="tabel">
+                <thead>
+                    <tr>
+                        <th>Nama</th>
+                        <th>Umur</th>
+                        <th>JK</th>
+                        <th>BB</th>
+                        <th>TB</th>
+                        <th>Tgl Minum</th>
+                        <th>Keluhan</th>
+                        <th>Aksi</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+
+        </div>
+
+    <footer>
+	<p style="color: rgba(239, 155, 15, 0.7)">.
+<p style="color: rgba(239, 155, 15, 0.7)">.
+        <p style="margin-bottom: 20px">Kreator: talithairsalina.15@gmail.com</p>
+        <p style="margin-bottom: 20px">Dibuat untuk memenuhi tugas Ketahanan Pangan kelompok 7 yang beranggotakan:</p>
+        <p>Raidah Rif’at (8881250019)</p>
+        <p>Renata Zhafira Putri Herlia (8881250036)</p>
+        <p>Talitha Azzahra Irsalina (8881250022)</p>
+        <p>Zalfa Aprillia Andini (881250011)</p>
+<p style="color: rgba(239, 155, 15, 0.7)">.
+    </footer>
+
+    <script>
+        const $ = id => document.getElementById(id);
+        let reminder = JSON.parse(localStorage.getItem('opm_reminder') || 'null');
+        let timer = null;
+
+        // --- Pengingat OPM ---
+        if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js');
+        if ('Notification' in window) Notification.requestPermission();
+
+        function saveReminder(r) { localStorage.setItem('opm_reminder', JSON.stringify(r)); reminder = r; renderReminder(); }
+        function clearReminder() { localStorage.removeItem('opm_reminder'); reminder = null; renderReminder(); }
+        function renderReminder() {
+            const info = $('reminder-info'), cd = $('countdown');
+            if (!reminder) { info.textContent = 'Belum ada pengingat aktif.'; cd.textContent = ''; if (timer) { clearInterval(timer); timer = null; } return; }
+            info.textContent = `Judul: ${reminder.title} | Interval: ${reminder.interval_days} hari | Aktif`;
+            startCountdown();
+        }
+        function startCountdown() {
+            if (timer) clearInterval(timer);
+            timer = setInterval(() => {
+                const now = new Date(), due = new Date(reminder.next_at);
+                const diff = due - now;
+                if (diff <= 0) {
+                    triggerReminder();
+                    if (reminder.interval_days > 0) {
+                        const next = new Date(due.getTime() + reminder.interval_days * 86400000);
+                        reminder.next_at = next.toISOString();
+                        saveReminder(reminder);
+                    } else { clearReminder(); }
+                    return;
+                }
+                // $('countdown').textContent = formatDiff(diff) + ' (Next: ' + due.toLocaleString() + ')'; // Baris ini mungkin menyebabkan error jika elemen 'countdown' tidak ada di HTML
+            }, 1000);
+        }
+        function formatDiff(ms) {
+            const s = Math.floor(ms / 1000), d = Math.floor(s / 86400), h = Math.floor((s % 86400) / 3600), m = Math.floor((s % 3600) / 60);
+            return `${d}h ${h}j ${m}m`;
+        }
+        function triggerReminder() {
+            const title = reminder.title || 'Pengingat OPM';
+            const body = 'Waktu minum obat pemberantasan cacing (OPM) telah tiba.';
+            navigator.serviceWorker.ready.then(sw => {
+                sw.showNotification(title, { body, icon: 'bell.png', tag: 'opm-reminder' });
+            });
+        }
+        // Tombol-tombol reminder dihilangkan dari HTML, jadi kode JS-nya saya biarkan (atau hapus jika tidak diperlukan)
+        // $('set-reminder').onclick=()=>{ ... };
+        // $('cancel-reminder').onclick=()=>{ ... };
+        // $('test-notif').onclick=()=>{ triggerReminder(); };
+        // renderReminder(); // Dihapus karena elemen HTML untuk reminder tidak ada
+
+        // --- Biodata ---
+        let data = JSON.parse(localStorage.getItem('biodata_opm') || '[]');
+
+        function renderTable(filterDate = null) {
+            const tbody = document.querySelector('#tabel tbody');
+            tbody.innerHTML = '';
+            data.filter(d => !filterDate || d.tgl === filterDate)
+                .forEach((d, i) => {
+                    const row = `<tr>
+            <td>${d.nama}</td><td>${d.umur}</td><td>${d.jk}</td>
+            <td>${d.bb}</td><td>${d.tb}</td><td>${d.tgl}</td><td>${d.keluhan}</td>
+            <td><button class="danger" onclick="hapusData(${i})">Hapus</button></td>
+            </tr>`;
+                    tbody.innerHTML += row;
+                });
+        }
+
+        function hapusData(index) {
+            if (confirm('Yakin ingin menghapus data ini?')) {
+                data.splice(index, 1);
+                localStorage.setItem('biodata_opm', JSON.stringify(data));
+                renderTable();
+            }
+        }
+
+        $('simpan').onclick = () => {
+            const biodata = {
+                nama: $('nama').value.trim(),
+                umur: $('umur').value,
+                jk: $('jk').value,
+                bb: $('bb').value,
+                tb: $('tb').value,
+                tgl: $('tgl').value,
+                keluhan: $('keluhan').value.trim()
+            };
+
+            // Semua kolom wajib diisi
+            if (!biodata.nama || !biodata.umur || !biodata.jk || !biodata.bb || !biodata.tb || !biodata.tgl || !biodata.keluhan) {
+                alert('Semua data biodata wajib diisi sebelum disimpan!');
+                return;
+            }
+
+            data.push(biodata);
+            localStorage.setItem('biodata_opm', JSON.stringify(data));
+            renderTable();
+            alert('Data tersimpan!');
+            ['nama', 'umur', 'jk', 'bb', 'tb', 'tgl', 'keluhan'].forEach(id => $(id).value = '');
+        };
+
+        $('cari').onclick = () => { renderTable($('cari-tgl').value); };
+
+        renderTable(); // Tampilkan data saat halaman dimuat
+    </script>
+</body>
+
+</html>
